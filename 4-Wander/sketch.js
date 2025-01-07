@@ -3,21 +3,23 @@ let vehicle;
 // un tableau pour stocker les véhicules
 let vehicles = [];
 
-
 function preload() {
   // on charge une image de fusée pour le vaisseau
   imageFusee = loadImage('./assets/vehicule.png');
 }
 
 function setup() {
-  createCanvas(1000, 800);
+  createCanvas(windowWidth, windowHeight);
   vehicle = new Vehicle(100, 100, imageFusee);
+  creerSliderPourNombreDeVehicules(10)
+  creerUnSlider("Vitesse", 0, 20, 10, 1, 10, 10, "maxSpeed");
+  creerUnSlider("distance cercle", 0, 200, 100, 1, 10, 40, "distanceCercle");
 }
 
 // Fonction bien pratique pour créer un slider qui change une propriété précice de tous les véhicules
 function creerUnSlider(label, min, max, val, step, posX, posY, propriete) {
   let slider = createSlider(min, max, val, step);
-  
+
   let labelP = createP(label);
   labelP.position(posX, posY);
   labelP.style('color', 'white');
@@ -25,7 +27,7 @@ function creerUnSlider(label, min, max, val, step, posX, posY, propriete) {
   slider.position(posX + 150, posY + 17);
 
   let valueSpan = createSpan(slider.value());
-  valueSpan.position(posX + 300, posY+17);
+  valueSpan.position(posX + 300, posY + 17);
   valueSpan.style('color', 'white');
   valueSpan.html(slider.value());
 
@@ -38,7 +40,7 @@ function creerUnSlider(label, min, max, val, step, posX, posY, propriete) {
 }
 
 function creerSliderPourNombreDeVehicules(nbVehicles) {
-   // un slider pour changer le nombre de véhicules
+  // un slider pour changer le nombre de véhicules
   // min, max, valeur, pas
   let nbVehiclesSlider = createSlider(1, 200, 10, 1);
   nbVehiclesSlider.position(160, 185);
@@ -50,7 +52,7 @@ function creerSliderPourNombreDeVehicules(nbVehicles) {
     // on efface les véhicules
     vehicles = [];
     // on en recrée
-    for(let i=0; i < nbVehiclesSlider.value(); i++) {
+    for (let i = 0; i < nbVehiclesSlider.value(); i++) {
       let vehicle = new Vehicle(100, 100, imageFusee);
       vehicles.push(vehicle);
     }
@@ -81,11 +83,11 @@ function draw() {
   background(0);
   //background(0, 0, 0, 20);
 
+  vehicles.forEach(vehicle => {
     vehicle.applyBehaviors();
-
     vehicle.update();
     vehicle.show();
-    vehicle.edges();
+  });
 }
 
 function keyPressed() {

@@ -5,14 +5,14 @@ class Vehicle {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
-    this.maxSpeed = 10;
-    this.maxForce = 0.6;
+    this.maxSpeed = 20;
+    this.maxForce = 3;
     this.r = 16;
-    this.rayonZoneDeFreinage = 100;
+    this.rayonZoneDeFreinage = 150;
   }
 
-  applyBehaviors(target) {
-    let force = this.arrive(target);
+  applyBehaviors(target, d=0) {
+    let force = this.arrive(target, d);
     this.applyForce(force);
   }
 
@@ -32,18 +32,19 @@ class Vehicle {
     return this.seek(target);
   }
 
-  arrive(target) {
+  arrive(target, d=0) {
     // 2nd argument true enables the arrival behavior
     // 3rd argumlent d is the distance behind the target
     // for "snake" behavior
-    return this.seek(target, true);
+    return this.seek(target, true, d);
   }
 
   flee(target) {
     // recopier code de flee de l'exemple précédent
+    return this.seek(target).mult(-1);
   }
 
-  seek(target, arrival=false) {
+  seek(target, arrival=false, d=0) {
     let desiredSpeed = p5.Vector.sub(target, this.pos);
     let desiredSpeedMagnitude = this.maxSpeed;
 
@@ -71,9 +72,9 @@ class Vehicle {
         // newVal = map(value, start1, stop1, start2, stop2,)
         // en français : on prend une valeur entre start1 et stop1, et on la transforme pour qu'elle soit
         // entre start2 et stop2
-        // ici dist est entre 0 et le razyon du cercle de freinage, et on transforme cette valeur
+        // ici dist est entre 0 et le rayon du cercle de freinage, et on transforme cette valeur
         // pour qu'elle soit entre 0 et maxSpeed
-        desiredSpeedMagnitude = map(dist, 0, this.rayonZoneDeFreinage, 0, this.maxSpeed)
+        desiredSpeedMagnitude = map(dist, d, this.rayonZoneDeFreinage, 0, this.maxSpeed)
       }
     }
 
@@ -106,8 +107,8 @@ class Vehicle {
     translate(this.pos.x, this.pos.y);
     rotate(this.vel.heading());
 
-    triangle(-this.r, -this.r / 2, -this.r, this.r / 2, this.r, 0);
-    //circle(0, 0, this.r * 2);
+    //triangle(-this.r, -this.r / 2, -this.r, this.r / 2, this.r, 0);
+    circle(0, 0, this.r);
     
     pop();
   }
