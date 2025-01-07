@@ -10,10 +10,17 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  vehicle = new Vehicle(100, 100, imageFusee);
+
+  for (let i = 0; i < 10; i++) {
+    let vehicle = new Vehicle(100, 100, imageFusee);
+    vehicles.push(vehicle);
+  }
+
   creerSliderPourNombreDeVehicules(10)
   creerUnSlider("Vitesse", 0, 20, 10, 1, 10, 10, "maxSpeed");
-  creerUnSlider("distance cercle", 0, 200, 100, 1, 10, 40, "distanceCercle");
+  creerUnSlider("Longueur trainée", 10, 150, 40, 1, 10, 40, "longueurQueue");
+  creerUnSlider("distance cercle", 0, 200, 100, 1, 10, 70, "distanceCercle");
+  creerUnSlider("rayon cercle", 0, 200, 100, 1, 10, 100, "rayonCercle");
 }
 
 // Fonction bien pratique pour créer un slider qui change une propriété précice de tous les véhicules
@@ -38,6 +45,7 @@ function creerUnSlider(label, min, max, val, step, posX, posY, propriete) {
     });
   });
 }
+
 
 function creerSliderPourNombreDeVehicules(nbVehicles) {
   // un slider pour changer le nombre de véhicules

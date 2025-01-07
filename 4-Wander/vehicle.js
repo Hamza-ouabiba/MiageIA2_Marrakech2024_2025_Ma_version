@@ -9,12 +9,14 @@ class Vehicle {
     this.r = 46;
     // sprite image du véhicule
     this.image = image;
-
+    this.couleur = color(random(255), random(255), random(255));
     // pour comportement wander
     this.distanceCercle = 150;
     this.wanderRadius = 50;
     this.wanderTheta = 0.1;
     this.displaceRange = 0.3;
+    this.longueurQueue = 20
+    this.path = []
   } 
 
   applyBehaviors() {
@@ -116,7 +118,7 @@ class Vehicle {
     }
     force.setMag(desiredSpeed);
     force.sub(this.vel);
-    force.limit(this.maxForce);
+    forcdistanceCerclee.limit(this.maxForce);
     return force;
   }
 
@@ -134,10 +136,15 @@ class Vehicle {
   show() {
     // dessin du vaisseau avec image
     push();
+    this.path.push(this.pos.copy());
+    this.dessinerTrait();
+    if(this.path.length > this.longueurQueue) {
+      this.path.shift();
+    }
     translate(this.pos.x, this.pos.y);
     rotate(this.vel.heading() - PI / 2);
     imageMode(CENTER);
-    image(this.image, 0, 0, this.r * 2, this.r * 2);
+    circle(0, 0, 20);
     pop();
   }
 
@@ -152,5 +159,21 @@ class Vehicle {
     } else if (this.pos.y < -this.r) {
       this.pos.y = height + this.r;
     }
+  }
+
+  dessinerTrait() {
+    let incrementOpacite = 255 / this.path.length;
+    let opacite = incrementOpacite
+    this.path.forEach((p1, i) => {  
+        if(i % 2 == 0) {
+          let r = red(this.couleur);
+          let g = green(this.couleur);
+          let b = blue(this.couleur);
+          fill(r,g,b,opacite)
+          noStroke(255);
+          circle(p1.x, p1.y, 4);
+        }
+        opacite += incrementOpacite;
+    });
   }
 }
